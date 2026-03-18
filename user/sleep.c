@@ -16,7 +16,7 @@ main(int argc, char *argv[])
     //convert the time argument from string to integer
     int time = atoi(argv[1]);
 
-    sleep(time * 100);
+    sleep(time * 10);
     
     exit(0);
 }
