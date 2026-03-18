@@ -1,19 +1,22 @@
-#include "kernel/types.h"
-#include "kernel/stat.h"
-#include "user/user.h"
+#include "types.h"
+#include "user.h"
 
 int
 main(int argc, char *argv[])
 {
-  int i;
+    char *errorMessage = "No time is provided\n";
 
-  for(i = 1; i < argc; i++){
-    write(1, argv[i], strlen(argv[i]));
-    if(i + 1 < argc){
-      write(1, " ", 1);
-    } else {
-      write(1, "\n", 1);
+
+    //error message if no time provided - just types sleep
+    if (argc < 2) {
+        write(2, errorMessage, strlen(errorMessage));
+        exit(1);
     }
-  }
-  exit(0);
+
+    //convert the time argument from string to integer
+    int time = atoi(argv[1]);
+
+    sleep(time * 100);
+    
+    exit(0);
 }
