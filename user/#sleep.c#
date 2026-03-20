@@ -15,7 +15,7 @@ main(int argc, char *argv[])
 
     //convert the time argument from string to integer
     int ticks = atoi(argv[1]);
-//test git push
+
     sleep(ticks);
     
     exit(0);
