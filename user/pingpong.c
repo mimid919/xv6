@@ -18,8 +18,8 @@ main(void)
     pipe(pipep_to_c1);
     pipe(pipep_to_c2);
 
-    char parentMessage[] = "ping";
-    char childMessage[] = "ACK";
+    char ping[] = "ping";
+    char ACK[] = "ACK";
 
     // first fork
     int pid1 = fork();
@@ -32,11 +32,11 @@ main(void)
         close(pipep_to_c1[1]);  //close the write 
         close(pipec1_to_p[0]);  //close the read
 
-        read(pipep_to_c1[0], buf, 5);
+        read(pipep_to_c1[0], buf, sizeof(buf));
 
         printf("%d: pong\n", getpid());
 
-        write(pipec1_to_p[1], childMessage, sizeof(childMessage));
+        write(pipec1_to_p[1], ACK, sizeof(ACK));
 
         close(pipep_to_c1[0]);  //close the read 
         close(pipec1_to_p[1]);  //close the write
@@ -55,11 +55,11 @@ main(void)
         close(pipep_to_c2[1]);  //close the write 
         close(pipec2_to_p[0]);  //close the read
 
-        read(pipep_to_c2[0], buf, 5);
+        read(pipep_to_c2[0], buf, sizeof(buf));
 
         printf("%d: pong\n", getpid());
 
-        write(pipec2_to_p[1], childMessage, sizeof(childMessage));
+        write(pipec2_to_p[1], ACK, sizeof(ACK));
 
         close(pipep_to_c2[0]);  //close the read 
         close(pipec2_to_p[1]);  //close the write
@@ -74,8 +74,8 @@ main(void)
     close(pipep_to_c2[0]);
 
     //send ping
-    write(pipep_to_c1[1], parentMessage, sizeof(parentMessage));
-    write(pipep_to_c2[1], parentMessage, sizeof(parentMessage));
+    write(pipep_to_c1[1], ping, sizeof(ping));
+    write(pipep_to_c2[1], ping, sizeof(ping));
 
     close(pipep_to_c1[1]);
     close(pipep_to_c2[1]);
@@ -84,8 +84,8 @@ main(void)
     char buf1[4];
     char buf2[4];
 
-    read(pipec1_to_p[0], buf1, 4);
-    read(pipec2_to_p[0], buf2, 4);
+    read(pipec1_to_p[0], buf1, sizeof(buf1));
+    read(pipec2_to_p[0], buf2, sizeof(buf2));
 
     close(pipec1_to_p[0]);
     close(pipec2_to_p[0]);
