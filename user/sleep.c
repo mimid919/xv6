@@ -4,7 +4,7 @@
 int
 main(int argc, char *argv[])
 {
-    char *errorMessage = "No time is provided\n";
+    char *errorMessage = "Usage: sleep <ticks>\n";
 
 
     //error message if no time provided - just types sleep
