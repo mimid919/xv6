@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         if (pid > 0) { // parent process
             wait(0); // wait for child to finish
             // print the parent process ID
-            printf("my ID is %d, my parent ID is %d\n", pid, getppid());
+            printf("my ID is %d, my parent ID is %d\n", getpid(), getppid());
             exit(0);
         }
     }
