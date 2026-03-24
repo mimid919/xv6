@@ -6,9 +6,9 @@
 #include "spinlock.h"
 #include "proc.h"
 
-// new sys call getpid
+// new sys call getppid
 uint64
-sys_getpid(void)
+sys_getppid(void)
 {
   struct proc *p = myproc();
   if(p->parent)
