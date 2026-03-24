@@ -6,6 +6,17 @@
 #include "spinlock.h"
 #include "proc.h"
 
+// new sys call getpid
+uint64
+sys_getpid(void)
+{
+  struct proc *p = myproc();
+  if(p->parent)
+    return p->parent->pid;
+  return 0; // if no parent
+}
+
+
 uint64
 sys_exit(void)
 {
