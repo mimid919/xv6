@@ -74,12 +74,13 @@ int main(int argc, char *argv[])
             exit(0);
         }
         
-        close(input_pipe
-        [0]); // tclose the read end of the input pipe
-        exit(0);
+
 
 
 
     }
+    //for the last filter, there is no child process to wait for, so we just close the input pipe and exit
+    close(input_pipe[0]); // tclose the read end of the input pipe
+        exit(0);
 
 }
