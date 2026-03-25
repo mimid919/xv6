@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    //eldest child prints
+    //last child prints
     printf("my ID is %d, my parent ID is %d\n", getpid(), getppid());
 
   
