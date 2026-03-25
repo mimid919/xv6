@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 
     // create first pipe for generated natural numbers
-    int input_pipe[2];
+    float input_pipe[2];
     pipe(input_pipe);
 
     // make an array with nums from 2 to num
@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 
             // close unused end
             close(right_pipe[1]); 
+            close(input_pipe[0]);
             input_pipe[0] = right_pipe[0]; // the child will read from the new pipe
 
         } else {
@@ -81,6 +82,6 @@ int main(int argc, char *argv[])
     }
     //for the last filter, there is no child process to wait for, so we just close the input pipe and exit
     close(input_pipe[0]); // tclose the read end of the input pipe
-        exit(0);
+    exit(0);
 
 }
