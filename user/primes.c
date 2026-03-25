@@ -15,43 +15,52 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    int input_pipe[2];
-    pipe(input_pipe);
-
-    for (int i = 2; i <= n; i++) {
-        write(input_pipe[1], &i, sizeof(i));
-    }
-    close(input_pipe[1]);
+    int pipe_fd[2];
+    pipe(pipe_fd);
 
     int prime;
     int pid;
 
-    while (read(input_pipe[0], &prime, sizeof(prime)) > 0) {
-        printf("%d\n", prime);
+    pid = fork();
+    if (pid == 0) {
+        close(pipe_fd[1]);
+        int input = pipe_fd[0];
 
-        int right_pipe[2];
-        pipe(right_pipe);
+        while (read(input, &prime, sizeof(prime)) > 0) {
+            printf("%d\n", prime);
 
-        pid = fork();
-        if (pid == 0) {
-            close(right_pipe[1]);
-            close(input_pipe[0]);
-            input_pipe[0] = right_pipe[0];
-        } else {
-            close(right_pipe[0]);
-            int num;
-            while (read(input_pipe[0], &num, sizeof(num)) > 0) {
-                if (num % prime != 0) {
-                    write(right_pipe[1], &num, sizeof(num));
+            int next_pipe[2];
+            pipe(next_pipe);
+
+            int child_pid = fork();
+            if (child_pid == 0) {
+                close(next_pipe[1]);
+                close(input);
+                input = next_pipe[0];
+            } else {
+                close(next_pipe[0]);
+                int num;
+                while (read(input, &num, sizeof(num)) > 0) {
+                    if (num % prime != 0) {
+                        write(next_pipe[1], &num, sizeof(num));
+                    }
                 }
+                close(next_pipe[1]);
+                close(input);
+                wait(0);
+                exit(0);
             }
-            close(right_pipe[1]);
-            close(input_pipe[0]);
-            wait(0);
-            exit(0);
         }
+        close(input);
+        exit(0);
+    } else {
+        close(pipe_fd[0]);
+        for (int i = 2; i <= n; i++) {
+            write(pipe_fd[1], &i, sizeof(i));
+        }
+        close(pipe_fd[1]);
+        wait(0);
     }
 
-    close(input_pipe[0]);
     exit(0);
 }
