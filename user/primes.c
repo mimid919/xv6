@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
 
     // create first pipe for generated natural numbers
-    float input_pipe[2];
+    int input_pipe[2];
     pipe(input_pipe);
 
     // make an array with nums from 2 to num
@@ -37,8 +37,6 @@ int main(int argc, char *argv[])
     int pid;
     int prime = 2;
 
-    while (read(input_pipe[0], &prime, sizeof(prime)) > 0) {
-   
     
         // (b) print that prime
         printf("prime %d\n", prime);
@@ -61,11 +59,13 @@ int main(int argc, char *argv[])
             close(right_pipe[0]); // close the read end of the new pipe
             // parent will write to new pipe
             int num;
-            while (read(input_pipe[0], &num, sizeof(num)) > 0) {
+               while (read(input_pipe[0], &prime, sizeof(prime)) > 0) {
+
                 if (num % prime != 0) {
                     write(right_pipe[1], &num, sizeof(num));
                 }
             }
+            
 
              // close both ends of the pipe
             close(right_pipe[1]); 
@@ -74,14 +74,10 @@ int main(int argc, char *argv[])
             wait(0); // wait for child to finish
             exit(0);
         }
-        
 
-
-
-
-    }
-    //for the last filter, there is no child process to wait for, so we just close the input pipe and exit
+        //for the last filter, there is no child process to wait for, so we just close the input pipe and exit
     close(input_pipe[0]); // tclose the read end of the input pipe
     exit(0);
+    }
+    
 
-}
